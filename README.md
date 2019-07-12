@@ -1,10 +1,24 @@
-## This repo will build out an environment for RHCE studies with Vagrant/Ansible.
+# Vagrant/Ansible Study/Test Environment.
 
-###### It includes two systems:
-- ipa.example.com (IP address: 192.168.55.5)
-- system1.example.com (IP address: 192.168.55.6)
-- system2.example.com (IP address: 192.168.55.7)
+## Required software before setting up:
+- Ansible - (`yum install ansible` or `brew install ansible`)
+- Python2 - (`yum install python2`)
+- [Vagrant](https://www.vagrantup.com/downloads.html)
+- [Virtualbox](https://www.virtualbox.org/wiki/Downloads) 
 
-The ipa server and clients for realm EXAMPLE.COM has already been setup and paired. The machines will take about 10 minutes to fully set up and then they will reboot at the end.
+Once the setup is complete, the ipa server and client for realm EXAMPLE.COM will already been setup and paired. 
 
-# ipasetup
+The machines will take about 10 minutes to fully set up and then they will reboot at the end.
+
+### It includes two systems:
+- ipa.example.com
+- system1.example.com
+- system2.example.com
+
+### Network Details:
+###### ipa
+192.168.55.5
+###### system1
+192.168.55.6
+###### system2
+192.168.55.7
