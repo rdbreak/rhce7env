@@ -7,46 +7,42 @@ config.vm.box_check_update = false
 config.vm.define "ipa" do |ipa|
   ipa.vm.box = "centos/7"
   ipa.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-  ipa.vm.network "forwarded_port", guest: 80, host: 8081
-  ipa.vm.network "forwarded_port", guest: 443, host: 8445
+#  ipa.vm.network "forwarded_port", guest: 80, host: 8089
+#  ipa.vm.network "forwarded_port", guest: 443, host: 8450
   ipa.vm.hostname = "ipa.example.com"
-  ipa.vm.network "private_network", ip: "192.168.55.5"
+  ipa.vm.network "private_network", ip: "192.168.55.20"
   ipa.vm.provider :virtualbox do |ipa|
-    ipa.customize ['modifyvm', :id,'--memory', '3072']
+    ipa.customize ['modifyvm', :id,'--memory', '2048']
     end
-  ipa.vm.provision "ansible" do |ansible|
-    ansible.playbook = 'playbooks/ipa.yml'
-  end
 end
   
 config.vm.define "system1" do |system1|
   system1.vm.box = "puppetlabs/centos-7.0-64-nocm"
-  system1.vm.network "forwarded_port", guest: 80, host: 8082
-  system1.vm.network "forwarded_port", guest: 443, host: 8446
+#  system.vm.network "forwarded_port", guest: 80, host: 8090
+#  system.vm.network "forwarded_port", guest: 443, host: 8451
   system1.vm.hostname = "system1.example.com"
-  system1.vm.network "private_network", ip: "192.168.55.6"
+  system1.vm.network "private_network", ip: "192.168.55.21"
   system1.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
 
   system1.vm.provider :virtualbox do |system1|
     system1.customize ['modifyvm', :id,'--memory', '1024']
     end
-  system1.vm.provision "ansible" do |ansible|
-    ansible.playbook = 'playbooks/system1.yml'
-  end
 end
+
 config.vm.define "system2" do |system2|
   system2.vm.box = "puppetlabs/centos-7.0-64-nocm"
-  system2.vm.network "forwarded_port", guest: 80, host: 8083
-  system2.vm.network "forwarded_port", guest: 443, host: 8447
+#  system2.vm.network "forwarded_port", guest: 80, host: 8090
+#  system2.vm.network "forwarded_port", guest: 443, host: 8451
   system2.vm.hostname = "system2.example.com"
-  system2.vm.network "private_network", ip: "192.168.55.7"
+  system2.vm.network "private_network", ip: "192.168.55.22"
   system2.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-
   system2.vm.provider :virtualbox do |system2|
     system2.customize ['modifyvm', :id,'--memory', '1024']
-    end
+  end
   system2.vm.provision "ansible" do |ansible|
-    ansible.playbook = 'playbooks/system2.yml'
+    ansible.version = "latest"
+    ansible.limit = "all"
+    ansible.playbook = 'playbooks/master.yml'
   end
 end
 end
