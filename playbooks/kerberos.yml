@@ -46,6 +46,18 @@
         ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password    
+  - name: Authenticating KRB5 Database
+    expect:
+      command: kinit admin
+      responses:
+        (.*)Password for admin@TEST.EXAMPLE.COM(.*): "password"
+    tags: kerberos
+  - name: Adding System1 NFS Principal to Keytab
+    command: sudo kadmin.local ktadd nfs/system1.test.example.com
+    tags: kerberos
+  - name: Adding System1 Host Principal to Keytab
+    command: sudo kadmin.local ktadd host/system1.test.example.com
+    tags: kerberos
   - name: Copying Keytab To Apache Server
     command: cp /etc/krb5.keytab /var/www/html/system.keytab
   - name: Adjusting Permissions
@@ -54,20 +66,3 @@
     command: cp /etc/krb5.keytab /var/www/html/system.keytab
   - name: Adjusting Permissions
     command: chmod 0644 /var/www/html/system.keytab
-#  - name: Authenticating KRB5 Database
-#    expect:
-#      command: kinit admin
-#      responses:
-#        (.*)Password for admin@EXAMPLE.COM(.*): "password"
-#    tags: kerberos
-
-#  - name: Accessing Kerberos Database
-#    expect:
-#      echo: yes
-#      timeout: "60"
-#      command: sudo kadmin.local
-#      responses:
-#         (.*)Authenticating as principal admin/admin@EXAMPLE.COM with password(.>): "ktadd nfs/system1.test.example.com"
-#         (.*)kadmin.local(.>): "ktadd nfs/system1.test.example.com"  
-#    tags: kerberos
-#

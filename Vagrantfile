@@ -26,6 +26,8 @@ config.vm.define "system1" do |system1|
 #  system.vm.network "forwarded_port", guest: 443, host: 8451
   system1.vm.hostname = "system1.test.example.com"
   system1.vm.network "private_network", ip: "192.168.55.21"
+  system1.vm.network "private_network", ip: "192.168.55.110"
+  system1.vm.network "private_network", ip: "192.168.55.111"
   system1.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
   system1.vm.provision :shell, :inline => "sudo rm -rf /etc/yum.repos.d/* ; touch /etc/yum.repos.d/ipa.repo;", run: "always"
   system1.vm.provider "virtualbox" do |system1|
@@ -50,6 +52,8 @@ config.vm.define "system2" do |system2|
 #  system2.vm.network "forwarded_port", guest: 443, host: 8451
   system2.vm.hostname = "system2.test.example.com"
   system2.vm.network "private_network", ip: "192.168.55.22"
+  system2.vm.network "private_network", ip: "192.168.55.112"
+  system2.vm.network "private_network", ip: "192.168.55.113"
   system2.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
   system2.vm.provision :shell, :inline => "sudo rm -rf /etc/yum.repos.d/* ; touch /etc/yum.repos.d/ipa.repo;", run: "always"
 

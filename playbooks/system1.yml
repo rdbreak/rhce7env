@@ -3,18 +3,20 @@
   strategy: free 
   gather_facts: False
   tasks:
-  - name: Setting up user
-    user:
-      name: user
-      comment: user
-      uid: 2000
-      group: wheel
-  - name: Setting Up Sudoers File
-    lineinfile:
-      path: /etc/sudoers
-      regexp: '^# %wheel'
-      insertbefore: '^%wheel'
-      line: '# %wheel        ALL=(ALL)       ALL'
+  - name: Changing User Password
+    command: echo vagrant | sudo passwd vagrant --stdin
+#  - name: Setting up user
+#    user:
+#      name: user
+#      comment: user
+#      uid: 2000
+#      group: wheel
+#  - name: Setting Up Sudoers File
+#    lineinfile:
+#      path: /etc/sudoers
+#      regexp: '^# %wheel'
+#      insertbefore: '^%wheel'
+#      line: '# %wheel        ALL=(ALL)       ALL'
   - name: Changing User Password
     command: echo password | sudo passwd user --stdin
   - name: Building Repo File

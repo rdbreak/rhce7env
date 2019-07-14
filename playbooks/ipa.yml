@@ -36,7 +36,7 @@
     command: firewall-cmd --permanent --add-service=http --add-service=https --add-service=ntp --add-service=dns --add-service=kerberos --add-service=ldap --add-service=ldaps --add-service=ftp
   - name: Reloaded Firewall. Installing Environment Packages...
     command: firewall-cmd --reload
-  - name: Environment Packages Installed. Configuring IPA..
+  - name: Packages Installed. Configuring IPA server...(Est. Time - 7 minutes)
     command: yum install -y ipa-server ipa-server-dns vsftpd
 #    async: 500
 #    poll: 0
@@ -46,7 +46,7 @@
 #    register: job_result
 #    until: job_result.finished
 #    retries: 16
-  - name: Configuring IPA server (Estimated Time - 7 minutes)
+  - name: IPA server Configured.
     command: sudo ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname=ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
     ignore_errors: yes
 #    async: 1000
