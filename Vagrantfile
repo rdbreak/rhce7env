@@ -40,11 +40,10 @@ config.vm.define "system1" do |system1|
     system1.customize ['storageattach', :id,  '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk1]
   end
   
-  config.vm.provision "shell", inline: <<-SHELL
-  yes| sudo mkfs.ext4 /dev/sdb
-  SHELL
-
-end
+    system1.vm.provision "shell", inline: <<-SHELL
+    yes| sudo mkfs.ext4 /dev/sdb
+    SHELL
+ end
 
 config.vm.define "system2" do |system2|
   system2.vm.box = "puppetlabs/centos-7.0-64-nocm"
@@ -67,9 +66,9 @@ config.vm.define "system2" do |system2|
     system2.customize ['storageattach', :id,  '--storagectl', 'SATA Controller', '--port', 2, '--device', 0, '--type', 'hdd', '--medium', file_to_disk2]
   end
   
-  config.vm.provision "shell", inline: <<-SHELL
-  yes| sudo mkfs.ext4 /dev/sdb
-  SHELL
+    system2.vm.provision "shell", inline: <<-SHELL
+    yes| sudo mkfs.ext4 /dev/sdb
+    SHELL
 
   system2.vm.provision "ansible" do |ansible|
     ansible.version = "latest"
