@@ -21,12 +21,12 @@
   - name: Adding system1 IP address to hosts file
     lineinfile:
       path: /etc/hosts
-      line: 192.168.55.21system1.test.example.com system1
+      line: 192.168.55.21 system1.test.example.com system1
       create: yes
   - name: Adding system2 IP address to hosts file
     lineinfile:
       path: /etc/hosts
-      line: 192.168.55.22 system2.example.com system1
+      line: 192.168.55.22 system2.test.example.com system1
       create: yes
   - name: Configuring network
     shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.20/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search example.com ipv4.method manual
@@ -47,7 +47,7 @@
 #    until: job_result.finished
 #    retries: 16
   - name: Configuring IPA server (Estimated Time - 7 minutes)
-    command: sudo ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname=ipa.test.example.com -r EXAMPLE.COM -p 'password' -n example.com -U --forwarder 8.8.8.8
+    command: sudo ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname=ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
     ignore_errors: yes
 #    async: 1000
 #    poll: 0

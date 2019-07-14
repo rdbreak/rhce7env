@@ -5,9 +5,9 @@
   tasks:
   - name: Adding NFS service to System1
     ipa_service:
-      name: nfs/system1.example.com
+      name: nfs/system1.test.example.com
       state: present
-      ipa_host: ipa.example.com
+      ipa_host: ipa.test.example.com
       ipa_user: admin
       ipa_pass: password 
   - name: Adding IPA user 'dave'
@@ -18,14 +18,14 @@
         givenname: dave
         sn: dave
         mail:
-        - dave@example.com
+        - dave@test.example.com
         telephonenumber:
         - '+555123456'
         sshpubkey:
         password: password
         uidnumber: 1001
         gidnumber: 100
-        ipa_host: ipa.example.com
+        ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password
   - name: Adding IPA user 'lisa'
@@ -36,14 +36,14 @@
         givenname: lisa
         sn: lisa
         mail:
-        - lisa@example.com
+        - lisa@test.example.com
         telephonenumber:
         - '+555123456'
         sshpubkey:
         password: password
         uidnumber: 1001
         gidnumber: 100
-        ipa_host: ipa.example.com
+        ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password    
   - name: Copying Keytab To Apache Server
@@ -54,19 +54,20 @@
     command: cp /etc/krb5.keytab /var/www/html/system.keytab
   - name: Adjusting Permissions
     command: chmod 0644 /var/www/html/system.keytab
-  - name: Authenticating KRB5 Database
-    expect:
-      command: kinit admin
-      responses:
-        (.*)Password for admin@EXAMPLE.COM(.*): "password"
-    tags: kerberos
+#  - name: Authenticating KRB5 Database
+#    expect:
+#      command: kinit admin
+#      responses:
+#        (.*)Password for admin@EXAMPLE.COM(.*): "password"
+#    tags: kerberos
 
-  - name: Accessing Kerberos Database
-    expect:
-      echo: yes
-      timeout: "60"
-      command: sudo kadmin.local
-      responses:
-         (.*)Authenticating as principal admin/admin@EXAMPLE.COM with password(.>): "ktadd nfs/system1.example.com"
-         (.*)kadmin.local(.>): "ktadd nfs/system1.example.com"  
-    tags: kerberos
+#  - name: Accessing Kerberos Database
+#    expect:
+#      echo: yes
+#      timeout: "60"
+#      command: sudo kadmin.local
+#      responses:
+#         (.*)Authenticating as principal admin/admin@EXAMPLE.COM with password(.>): "ktadd nfs/system1.test.example.com"
+#         (.*)kadmin.local(.>): "ktadd nfs/system1.test.example.com"  
+#    tags: kerberos
+#
