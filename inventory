@@ -1,6 +1,6 @@
 [ipa]
-ipa.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
+ipa.test.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
 [system1]
-system1.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
+system1.test.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
 [system2]
-system2.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
+system2.test.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
