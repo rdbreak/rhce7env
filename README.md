@@ -31,10 +31,10 @@ The first time you run the vagrant up command, it will download the OS images fo
 ###### system2
 192.168.55.22
 
-### Local users
-- Username = vagrant
-- Password = vagrant (if prompted)
-- For root = use `sudo` or `sudo su`
+### Accessing the systems
+Access by `vagrant ssh ipa` or `vagrant ssh system1`
+- For root - use `sudo` or `sudo su`
+
 ### LDAP users
 - Username = dave, lisa
 - Password = password
