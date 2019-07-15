@@ -11,8 +11,6 @@ config.vm.define "ipa" do |ipa|
   ipa.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
   ipa.vm.provision :shell, :inline => "sudo yum install -y wget | grep -v 'warning\|Error'; sudo cd /etc/pki/rpm-gpg;  sudo wget http://yum.theforeman.org/releases/1.8/RPM-GPG-KEY-foreman; sudo rpm --import RPM-GPG-KEY-foreman; sudo rpm -qa gpg* ; sudo rpm -qi gpg-pubkey-225c9b71-54fda121;", run: "always"
   ipa.vm.provision :shell, :inline => "sudo yum install -y epel-release; sudo yum -y install python36 | grep -v 'DEPRECATION'; sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py | grep -v 'DEPRECATION' ; python get-pip.py  | grep -v 'DEPRECATION'; sudo pip install -U pip | grep -v 'DEPRECATION'; sudo pip install pexpect | grep -v 'DEPRECATION';", run: "always"
-  #  ipa.vm.network "forwarded_port", guest: 80, host: 8089
-#  ipa.vm.network "forwarded_port", guest: 443, host: 8450
   ipa.vm.hostname = "ipa.test.example.com"
   ipa.vm.network "private_network", ip: "192.168.55.20"
   ipa.vm.provider :virtualbox do |ipa|
@@ -22,8 +20,6 @@ end
   
 config.vm.define "system1" do |system1|
   system1.vm.box = "puppetlabs/centos-7.0-64-nocm"
-#  system.vm.network "forwarded_port", guest: 80, host: 8090
-#  system.vm.network "forwarded_port", guest: 443, host: 8451
   system1.vm.hostname = "system1.test.example.com"
   system1.vm.network "private_network", ip: "192.168.55.21"
   system1.vm.network "private_network", ip: "192.168.55.110"
@@ -47,8 +43,7 @@ config.vm.define "system1" do |system1|
 
 config.vm.define "system2" do |system2|
   system2.vm.box = "puppetlabs/centos-7.0-64-nocm"
-#  system2.vm.network "forwarded_port", guest: 80, host: 8090
-#  system2.vm.network "forwarded_port", guest: 443, host: 8451
+
   system2.vm.hostname = "system2.test.example.com"
   system2.vm.network "private_network", ip: "192.168.55.22"
   system2.vm.network "private_network", ip: "192.168.55.112"
