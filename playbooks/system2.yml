@@ -1,13 +1,18 @@
 ---
 - hosts: system2
-  strategy: free 
+  strategy: free
   gather_facts: False
   tasks:
   - name: Changing User Password
-    command: echo vagrant | sudo passwd vagrant --stdin
+    shell: echo vagrant | sudo passwd vagrant --stdin
+  - name: Creating Temporary Repo File
+    file:
+      path: /etc/yum.repos.d/ipa.repo
+      state: touch
+      mode: 0755
   - name: Building Repo File
     blockinfile:
-      path: /etc/yum.repos.d/ipa.repo
+      dest: /etc/yum.repos.d/ipa.repo
       block: |
        [ipa]
        name=ipa repo
@@ -15,6 +20,7 @@
        gpgcheck=1
        gpgkey=http://reflector.westga.edu/repos/CentOS/7/os/x86_64/RPM-GPG-KEY-CentOS-7
        enabled=1
+    tags: repo
   - name: Disabling services
     selinux:
       state: disabled
@@ -62,11 +68,14 @@
 #    until: job_result.finished
 #    retries: 40  
   - name: Configuring IPA client
-    command: ipa-client-install --enable-dns-updates --force-join --principal admin --server  ipa.test.example.com -w password --hostname system2.test.example.com --realm TEST.EXAMPLE.COM --domain test.example.com -U
+    command: ipa-client-install --enable-dns-updates --force-join --mkhomedir --principal admin --server  ipa.test.example.com -w password --hostname system2.test.example.com --realm TEST.EXAMPLE.COM --domain test.example.com -U
     ignore_errors: yes
     async: 500
     poll: 0
     register: ipa_sleeper
+  - name: Erasing Repos
+    shell: rm -rf /etc/yum.repos.d/*
+    tags: repo
   - name: Enabling services
     service: name=firewalld enabled=true
   - name: Starting services
@@ -78,4 +87,4 @@
     retries: 40
   - name: Rebooting machine
     reboot:
-      reboot_timeout: 60
+      reboot_timeout: 80

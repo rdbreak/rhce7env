@@ -37,7 +37,15 @@
   - name: Reloaded Firewall. Installing Environment Packages...
     command: firewall-cmd --reload
   - name: Packages Installed. Configuring IPA server...(Est. Time - 7 minutes)
-    command: yum install -y ipa-server ipa-server-dns vsftpd
+    yum:
+      name:
+        - ipa-server
+        - ipa-server-dns
+        - vsftpd
+        - createrepo
+      state: present
+  - name: Configuring Repo For System
+    command: createrepo /var/www/html/rpms
 #    async: 500
 #    poll: 0
 #    register: yum_sleeper
@@ -64,3 +72,5 @@
       - httpd
       - vsftpd
       - firewalld
+  - name: Setting SELinux To Permissive
+    shell: setenforce 0

@@ -23,7 +23,7 @@
         - '+555123456'
         sshpubkey:
         password: password
-        uidnumber: 1001
+        uidnumber: 1000
         gidnumber: 100
         ipa_host:  ipa.test.example.com
         ipa_user: admin
@@ -42,7 +42,7 @@
         sshpubkey:
         password: password
         uidnumber: 1001
-        gidnumber: 100
+        gidnumber: 101
         ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password    
