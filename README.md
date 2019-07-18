@@ -40,8 +40,7 @@ There is a repo available to use from `http://ipa.test.example.com/rpms`
 
 ### Accessing the systems
 Remember to add the IP addresses to your local host file if you want to connect to the guest systems with the hostname.
-Username - vagrant
-Password - vagrant
+`ssh vagrant@192.168.55.21` - Password - `password` 
 - For root - use `sudo` or `sudo su`
 
 ### LDAP users
