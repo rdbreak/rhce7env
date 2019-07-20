@@ -26,7 +26,7 @@
   - name: Adding system2 IP address to hosts file
     lineinfile:
       path: /etc/hosts
-      line: 192.168.55.22 system2.test.example.com system1
+      line: 192.168.55.22 system2.test.example.com system2
       create: yes
   - name: Configuring network
     shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.20/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search example.com ipv4.method manual

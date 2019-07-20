@@ -6,8 +6,10 @@
 - [Vagrant](https://www.vagrantup.com/downloads.html) - (`brew cask install vagrant`)
 - [Virtualbox](https://www.virtualbox.org/wiki/Downloads) (`brew cask install VirtualBox`)
 - SSHPASS `brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb`
+- Virtual Box Extension Pack (`brew cask install virtualbox-extension-pack`)
+
 ### Install at once with the command below:
-(`brew install ansible ; brew install python ; brew cask install vagrant ; brew cask install VirtualBox ; brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb`)
+(`brew install ansible ; brew install python ; brew cask install vagrant ; brew cask install VirtualBox ; brew install https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb ; brew cask install virtualbox-extension-pack`)
 
 If you're using a Mac, Gatekeeper will block virtualbox from installing. All you have to do is go to System Preferences and click Allow under the General tab and rerun installation.
 
