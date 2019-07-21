@@ -40,6 +40,8 @@ The first time you run the vagrant up command, it will download the OS images fo
 
 There is a repo available to use from `http://ipa.test.example.com/rpms`
 
+There are also two additional network interfaces and an additional drive on node1 and node2 to optionally use.
+
 ### Accessing the systems
 Remember to add the IP addresses to your local host file if you want to connect to the guest systems with the hostname.
 Username - vagrant
