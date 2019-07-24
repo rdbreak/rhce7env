@@ -66,3 +66,17 @@
     command: cp /etc/krb5.keytab /var/www/html/system.keytab
   - name: Adjusting Permissions
     command: chmod 0644 /var/www/html/system.keytab
+  - name: Welcome to the RHCE 7 Study/Test Environment!
+    debug:
+      msg:
+        - 'Next Steps: Accessing The Systems:'
+        - '- IPA - 192.168.55.20'
+        - '- System 1 - 192.168.55.21'
+        - '- System 2 - 192.168.55.22'
+        - '- Username - vagrant'
+        - '- Password - vagrant'
+        - '- For root - use `sudo` or `sudo su`'
+        - '- Access example - `ssh vagrant@192.168.55.21`'
+        - 'LDAP Users'
+        - '- Username = dave, lisa'
+        - '- Password = password'
