@@ -1,3 +1,8 @@
+[all]
+ipa.test.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
+system2.test.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
+[repo]
+repo.test.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
 [ipa]
 ipa.test.example.com ansible_user=vagrant ansible_ssh_pass=vagrant
 [system1]

@@ -2,6 +2,7 @@
 - hosts: ipa
   strategy: free 
   gather_facts: False
+  become: true
   tasks:
   - name: Fixing hosts file
     lineinfile:
@@ -17,6 +18,11 @@
     lineinfile:
       path: /etc/hosts
       line: 192.168.55.20 ipa.test.example.com ipa
+      create: yes
+  - name: Adding Repo address to hosts file
+    lineinfile:
+      path: /etc/hosts
+      line: 192.168.55.19 repo.test.example.com repo
       create: yes
   - name: Adding system1 IP address to hosts file
     lineinfile:
@@ -42,10 +48,7 @@
         - ipa-server
         - ipa-server-dns
         - vsftpd
-        - createrepo
       state: present
-  - name: Configuring Repo For System
-    command: createrepo /var/www/html/rpms
 #    async: 500
 #    poll: 0
 #    register: yum_sleeper
@@ -55,7 +58,7 @@
 #    until: job_result.finished
 #    retries: 16
   - name: IPA server Configured.
-    command: sudo ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
+    command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
     ignore_errors: yes
 #    async: 1000
 #    poll: 0
@@ -74,3 +77,41 @@
       - firewalld
   - name: Setting SELinux To Permissive
     shell: setenforce 0
+  - name: Generating RSA Key
+    command : ssh-keygen -q -t rsa -f /home/vagrant/.ssh/id_rsa -C "" -N ""
+    become: yes
+    become_user: vagrant
+  - name: Creating Welcome Message
+    file:
+      path: /etc/profile.d/welcome.sh
+      state: touch
+      mode: 0755
+  - name: Building Welcome Message
+    blockinfile:
+      dest: /etc/profile.d/welcome.sh
+      block: |
+         #!/bin/bash
+         #
+         echo -e '
+         #             _         _         _          
+         #           /\ \      /\ \      / /\        
+         #           \ \ \    /  \ \    / /  \       
+         #           /\ \_\  / /\ \ \  / / /\ \      
+         #          / /\/_/ / / /\ \_\/ / /\ \ \     
+         #         / / /   / / /_/ / / / /  \ \ \    
+         #        / / /   / / /__\/ / / /___/ /\ \   
+         #       / / /   / / /_____/ / /_____/ /\ \  
+         #   ___/ / /__ / / /     / /_________/\ \ \ 
+         #  /\__\/_/___/ / /     / / /_       __\ \_\
+         #  \/_________\/_/      \_\___\     /____/_/
+         '"#
+         # Why are you here? You should be working on the system hosts...
+         # Anyway, try not to reboot me or bad stuff can happen.
+         #
+         # You are logged into `hostname`
+         # This system is running `cat /etc/redhat-release`
+         # kernel is `uname -r`
+         #
+         # You are logged in as `whoami`
+         #
+         "

@@ -2,7 +2,17 @@
 - hosts: ipa
   strategy: free
   gather_facts: False
+  become: true
   tasks:
+  - ipa_dnsrecord:
+      ipa_host: ipa.test.example.com
+      ipa_pass: password
+      state: present
+      zone_name: test.example.com
+      record_name: system1
+      record_type: 'A'
+      record_value: '192.168.55.21'
+    ignore_errors: true
   - name: Adding NFS service to System1
     ipa_service:
       name: nfs/system1.test.example.com
@@ -46,6 +56,28 @@
         ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password    
+  - name: Sending Key to System1
+    expect:
+      command: ssh-copy-id -i /home/vagrant/.ssh/id_rsa.pub vagrant@system1.test.example.com 
+      responses:
+        'Are you sure you want to continue connecting': 'yes'
+        'Password': 'vagrant'
+        '\]\$': 'logout'
+      timeout: 10
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
+  - name: Sending Key to System2
+    expect:
+      command: ssh-copy-id -i /home/vagrant/.ssh/id_rsa.pub vagrant@system2.test.example.com 
+      responses:
+        'Are you sure you want to continue connecting': 'yes'
+        'Password': 'vagrant'
+        '\]\$': 'logout'
+      timeout: 10
+    become: yes
+    become_user: vagrant
+    ignore_errors: yes
   - name: Authenticating KRB5 Database
     expect:
       command: kinit admin
@@ -73,12 +105,7 @@
         - '- IPA - 192.168.55.20'
         - '- System 1 - 192.168.55.21'
         - '- System 2 - 192.168.55.22'
-        - '- Username - vagrant'
-        - '- Password - vagrant'
+        - '- Username/Password - vagrant/vagrant'
         - '- For root - use `sudo` or `sudo su`'
-        - '- Access example - `ssh vagrant@192.168.55.21`'
-        - 'LDAP Users'
-        - '- Username = dave, lisa'
-        - '- Password = password'
-        - 'Repo is available to use from `http://ipa.test.example.com/rpms`'
+        - '- Access example - `ssh vagrant@192.168.55.21` or `vagrant ssh system1`'
         - '- Happy Studying!'
