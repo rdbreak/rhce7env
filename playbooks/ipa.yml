@@ -4,6 +4,8 @@
   gather_facts: False
   become: true
   tasks:
+  - name: Setting Hostname
+    command: hostnamectl set-hostname ipa.test.example.com
   - name: Fixing hosts file
     lineinfile:
       dest: /etc/hosts
@@ -49,26 +51,9 @@
         - ipa-server-dns
         - vsftpd
       state: present
-#    async: 500
-#    poll: 0
-#    register: yum_sleeper
-#  - name: --> Not actually failing.. Finishing Environment Package Installation...
-#    async_status: jid={{ yum_sleeper.ansible_job_id }}
-#    register: job_result
-#    until: job_result.finished
-#    retries: 16
   - name: IPA server Configured.
     command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
     ignore_errors: yes
-#    async: 1000
-#    poll: 0
-#    register: ipa_config_sleeper
-#    ignore_errors: yes
-#  - name: Still Working On IPA Configuration...It takes time ¯\_(ツ)_/¯
-#    async_status: jid={{ ipa_config_sleeper.ansible_job_id }}
-#    register: job_result
-#    until: job_result.finished
-#    retries: 70   
   - name: Enabling services
     service: name={{item}} enabled=true
     with_items:
