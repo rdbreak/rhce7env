@@ -21,21 +21,21 @@ _Gatekeeper will block virtualbox from installing. All you have to do is go to S
 
 _Now you should be ready to follow the next steps and get the deployment up and running!_
 
-###### Once the above software is installed. Do the following if you're running the environment on Mac/Linux:
+## Once the above software is installed. Do the following if you're running the environment on Mac/Linux:
 1. Create a separate `~/bin` directory and `cd` to it.  (The directory doesn't have to be `~/bin`, it can be anything you want.)
 2. Clone the environment repo to it with `git clone https://github.com/rdbreak/rhce7env.git`
 3. Change to the `rhce7env` directory that is now in your `~/bin` directory.
 3. Run `vagrant up` to deploy the environment 
 
-###### Once the above software is installed. Do the following if you're running the environment on Windows:
+## Once the above software is installed. Do the following if you're running the environment on Windows:
 1. Create a separate `~/bin` directory and `cd` to it.  (The directory doesn't have to be ~/bin, it can be anything you want.)
 2. Use your browser of choice and navigate to https://github.com/rdbreak/rhce7env, press the green “Clone or download” button then the “Download ZIP” button.
 3. Once downloaded, unzip the file and move it to the directory you created earlier.
 3. Open CMD prompt and cd to the repo directory then run `vagrant up` to deploy the environment
 
-*Also, don't be spooked by any scary red font during the setup process. There are known issues that won't have a negative affect on the environment.* 
-
 _NOTE - You can also use the VirtualBox console to interact with the VMs or through a terminal. If you need to reset the root password, you would need to use the console._
+
+*Also, don't be spooked by any scary red font during the setup process. There are known issues that won't have a negative affect on the environment.* 
 
 ## (Optional) Install Github Desktop to make pulling down changes easier
 _NOTE this requires a free Github account_
