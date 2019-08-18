@@ -105,7 +105,7 @@
          #  \ \/___/ /          \ \_\ \/___/ / /_/ /     / / /_______\/_/    / / /     / /_____/ / 
          #   \_____\/            \/_/\_____\/  \_\/      \/__________/       \/_/      \________/  
          '"#
-         # You are logged into `hostname` as the `whoami` user
+         # You are logged into \"`hostname`\" as user \"`whoami`\"
          # This system is running `cat /etc/redhat-release`
          # kernel is `uname -r`
          #
