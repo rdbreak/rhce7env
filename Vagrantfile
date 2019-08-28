@@ -62,7 +62,7 @@ config.vm.define "system2" do |system2|
   system2.vm.provision :shell, :inline => "sudo yum install -y python-devel curl bash-completion;sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py ; python get-pip.py ; sudo pip install -U pip ; sudo pip install pexpect;", run: "always"
   system2.vm.provision :shell, :inline => "pip install ansible", run: "always"
   system2.vm.provision :shell, :inline => "sudo yum group install -y \"Development Tools\" ; echo \'vagrant\' | sudo passwd vagrant --stdin", run: "always"
-  system2.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
+#  system2.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
   system2.vm.provider "virtualbox" do |system2|
     system2.memory = "1024"
 
