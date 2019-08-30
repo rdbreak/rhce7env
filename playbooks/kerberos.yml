@@ -63,6 +63,7 @@
         'Are you sure you want to continue connecting': 'yes'
         'Password': 'vagrant'
         '\]\$': 'logout'
+        "vagrant@system1.test.example.com's password": 'vagrant'
       timeout: 10
     become: yes
     become_user: vagrant
@@ -74,6 +75,7 @@
         'Are you sure you want to continue connecting': 'yes'
         'Password': 'vagrant'
         '\]\$': 'logout'
+        "vagrant@system2.test.example.com's password": 'vagrant'
       timeout: 10
     become: yes
     become_user: vagrant

@@ -17,26 +17,18 @@ config.vm.define "repo" do |repo|
   repo.vm.provision :shell, :inline => "sudo yum install -y httpd sshpass", run: "always"
   repo.vm.provision :shell, :inline => "sudo yum install -y python-devel curl ;sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py ; python get-pip.py ; sudo pip install -U pip ; sudo pip install pexpect;", run: "always"
   repo.vm.provision :shell, :inline => "pip install ansible", run: "always"
-  repo.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
+#  repo.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
   repo.vm.provider "virtualbox" do |repo|
     repo.memory = "1024"
   end
-  repo.vm.provision :shell, :inline => "sudo yum group install -y \"Development Tools\" ; sudo yum install -y python-devel curl ;sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py ; python get-pip.py ; sudo pip install -U pip ; sudo pip install pexpect;", run: "always"
-  repo.vm.synced_folder ".", "/vagrant"
 end
 config.vm.define "system1" do |system1|
-  system1.vm.box = "puppetlabs/centos-7.0-64-nocm"
+  system1.vm.box = "rdbreak/pracenvs"
 #  system1.vm.hostname = "system1.test.example.com"
   system1.vm.network "private_network", ip: "192.168.55.21"
   system1.vm.network "private_network", ip: "192.168.55.110"
   system1.vm.network "private_network", ip: "192.168.55.111"
   system1.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-  system1.vm.provision :shell, :inline => "yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y; sudo yum install -y sshpass httpd vsftpd createrepo pki-ca", run: "always"
-  system1.vm.provision :shell, :inline => "sudo yum install -y httpd sshpass", run: "always"
-  system1.vm.provision :shell, :inline => "sudo yum install -y python-devel curl bash-completion;sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py ; python get-pip.py ; sudo pip install -U pip ; sudo pip install pexpect;", run: "always"
-  system1.vm.provision :shell, :inline => "pip install ansible", run: "always"
-  system1.vm.provision :shell, :inline => "sudo yum group install -y \"Development Tools\" ; echo \'vagrant\' | sudo passwd vagrant --stdin", run: "always"
-  system1.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
   system1.vm.provider "virtualbox" do |system1|
     system1.memory = "1024"
 
@@ -51,18 +43,12 @@ config.vm.define "system1" do |system1|
     SHELL
   end
 config.vm.define "system2" do |system2|
-  system2.vm.box = "puppetlabs/centos-7.0-64-nocm"
+  system2.vm.box = "rdbreak/pracenvs"
 #  system2.vm.hostname = "system2.test.example.com"
   system2.vm.network "private_network", ip: "192.168.55.22"
   system2.vm.network "private_network", ip: "192.168.55.112"
   system2.vm.network "private_network", ip: "192.168.55.113"
   system2.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-  system2.vm.provision :shell, :inline => "yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y; sudo yum install -y sshpass httpd vsftpd createrepo pki-ca", run: "always"
-  system2.vm.provision :shell, :inline => "sudo yum install -y httpd sshpass", run: "always"
-  system2.vm.provision :shell, :inline => "sudo yum install -y python-devel curl bash-completion;sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py ; python get-pip.py ; sudo pip install -U pip ; sudo pip install pexpect;", run: "always"
-  system2.vm.provision :shell, :inline => "pip install ansible", run: "always"
-  system2.vm.provision :shell, :inline => "sudo yum group install -y \"Development Tools\" ; echo \'vagrant\' | sudo passwd vagrant --stdin", run: "always"
-#  system2.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
   system2.vm.provider "virtualbox" do |system2|
     system2.memory = "1024"
 
@@ -87,7 +73,6 @@ config.vm.define "ipa" do |ipa|
   ipa.vm.provision :shell, :inline => "pip install ansible", run: "always"
   ipa.vm.provision :shell, :inline => "sudo yum group install -y \"Development Tools\"", run: "always"
   #  ipa.vm.hostname = "ipa.test.example.com"
-  ipa.vm.synced_folder ".", "/vagrant", type: "rsync", rsync__exclude: ".git/"
   ipa.vm.network "private_network", ip: "192.168.55.20"
   ipa.vm.provider :virtualbox do |ipa|
     ipa.customize ['modifyvm', :id,'--memory', '2048']
