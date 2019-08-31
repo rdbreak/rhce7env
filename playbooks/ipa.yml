@@ -44,13 +44,27 @@
     command: firewall-cmd --permanent --add-service=http --add-service=https --add-service=ntp --add-service=dns --add-service=kerberos --add-service=ldap --add-service=ldaps --add-service=ftp
   - name: Reloaded Firewall. Installing Environment Packages...
     command: firewall-cmd --reload
+  - name: Creating Temporary Repo File
+    file:
+      path: /etc/yum.repos.d/rpms.repo
+      state: touch
+      mode: 0755
+  - name: Building Repo File
+    blockinfile:
+      dest: /etc/yum.repos.d/rpms.repo
+      block: |
+       [rpms]
+       name=rpms
+       baseurl=http://repo/rpms
+       gpgcheck=0
+       enabled=1
   - name: Packages Installed. Configuring IPA server...(Est. Time - 7 minutes)
     yum:
       name:
         - vsftpd
-        - bind-dyndb-ldap
         - ipa-server
         - ipa-server-dns
+        - chrony
       state: present
   - name: IPA server Configured.
     command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
@@ -61,6 +75,7 @@
       - httpd
       - vsftpd
       - firewalld
+      - chronyd
   - name: Setting SELinux To Permissive
     shell: setenforce 0
   - name: Generating RSA Key
