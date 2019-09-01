@@ -110,4 +110,6 @@
         - '- Username/Password - vagrant/vagrant'
         - '- For root - use `sudo` or `sudo su`'
         - '- Access example - `ssh vagrant@192.168.55.21` or `vagrant ssh system1`'
+        - ' ---------------------------------------------------------------------'
+        - '- Repo is available to use from http://repo.test.example.com/rpms'
         - '- Happy Studying!'

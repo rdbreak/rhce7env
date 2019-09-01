@@ -82,6 +82,7 @@
     command : ssh-keygen -q -t rsa -f /home/vagrant/.ssh/id_rsa -C "" -N ""
     become: yes
     become_user: vagrant
+    ignore_errors: yes
   - name: Creating Welcome Message
     file:
       path: /etc/profile.d/welcome.sh

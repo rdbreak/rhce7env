@@ -8,7 +8,8 @@
     command: hostnamectl set-hostname system2.test.example.com
   - name: Disabling services
     selinux:
-      state: disabled
+      state: permissive
+      policy: targeted
   - name: Fixing hosts file
     lineinfile:
       dest: /etc/hosts
@@ -70,7 +71,7 @@
       path: /etc/profile.d/welcome.sh
       state: touch
       mode: 0755
-  - name: Building Welcome Message
+  - name: Building Welcome Message. Rebooting System 2
     blockinfile:
       dest: /etc/profile.d/welcome.sh
       block: |
@@ -103,4 +104,6 @@
          # Usernames = dave, lisa
          # Passwords = password
          "
+  - name: Rebooting System 2
+    reboot:
 ...
