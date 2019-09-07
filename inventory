@@ -1,8 +1,8 @@
 [repo]
-repo.test.example.com ansible_host=192.168.55.19 ansible_user=vagrant ansible_ssh_pass=vagrant ansible_python_interpreter=/usr/bin/python
+repo.test.example.com ansible_host=192.168.55.19 ansible_user=vagrant ansible_ssh_pass=vagrant
 [ipa]
-ipa.test.example.com ansible_host=192.168.55.20 ansible_user=vagrant ansible_ssh_pass=vagrant ansible_python_interpreter=/usr/bin/python
+ipa.test.example.com ansible_host=192.168.55.20 ansible_user=vagrant ansible_ssh_pass=vagrant
 [system1]
-system1.test.example.com ansible_host=192.168.55.21 ansible_user=vagrant ansible_ssh_pass=vagrant ansible_python_interpreter=/usr/bin/python
+system1.test.example.com ansible_host=192.168.55.21 ansible_user=vagrant ansible_ssh_pass=vagrant
 [system2]
-system2.test.example.com ansible_host=192.168.55.22 ansible_user=vagrant ansible_ssh_pass=vagrant ansible_python_interpreter=/usr/bin/python
+system2.test.example.com ansible_host=192.168.55.22 ansible_user=vagrant ansible_ssh_pass=vagrant

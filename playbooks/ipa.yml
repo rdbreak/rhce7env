@@ -59,13 +59,7 @@
        gpgcheck=0
        enabled=1
   - name: Packages Installed. Configuring IPA server...(Est. Time - 7 minutes)
-    yum:
-      name:
-        - vsftpd
-        - ipa-server
-        - ipa-server-dns
-        - chrony
-      state: present
+    command: yum install -y vsftpd ipa-server ipa-server-dns chrony
   - name: IPA server Configured.
     command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
     ignore_errors: yes

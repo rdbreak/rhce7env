@@ -52,7 +52,7 @@ sudo snap install ruby ; sudo apt install ruby-bundler git -y; wget -c https://r
 1. Create a separate `~/bin` directory and `cd` to it.  (The directory doesn't have to be ~/bin, it can be anything you want.)
 2. Use your browser of choice and navigate to https://github.com/rdbreak/rhce7env, press the green “Clone or download” button then the “Download ZIP” button.
 3. Once downloaded, unzip the file and move it to the directory you created earlier, `~/bin` in the above example.
-4. Open PowerShell and cd to the `~/bin/rhce7env` directory then run `vagrant up` to deploy the environment (The first time will take the longest, this is because the repo system has all the packages available to the 7.0 release but will be quicker on subsequent deployments.)
+4. Open PowerShell as Administrator and cd to the `~/bin/rhce7env` directory then run `vagrant up` to deploy the environment (The first time will take the longest, this is because the repo system has all the packages available to the 7.0 release but will be quicker on subsequent deployments.)
 
 
 **Also, don't be spooked by any scary red font during the setup process. There are known issues that won't have a negative affect on the environment.**
@@ -72,6 +72,7 @@ You can also use the VirtualBox console to interact with the VMs or through a te
 - ipa.test.example.com
 - repo.test.example.com
 - system1.test.example.com
+- system2.test.example.com
 
 ## System Details:
 > repo

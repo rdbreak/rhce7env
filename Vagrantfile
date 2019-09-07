@@ -59,11 +59,8 @@ end
 config.vm.define "ipa" do |ipa|
   ipa.vm.box = "centos/7"
   ipa.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
-  ipa.vm.provision :shell, :inline => "yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y; sudo yum install -y sshpass httpd vsftpd createrepo pki-ca", run: "always"
-  ipa.vm.provision :shell, :inline => "sudo yum install -y httpd sshpass", run: "always"
-  ipa.vm.provision :shell, :inline => "sudo yum install -y python-devel curl ;sudo curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py ; python get-pip.py ; sudo pip install -U pip ; sudo pip install pexpect;", run: "always"
-  ipa.vm.provision :shell, :inline => "pip install ansible", run: "always"
-  ipa.vm.provision :shell, :inline => "sudo yum group install -y \"Development Tools\"", run: "always"
+  ipa.vm.provision :shell, :inline => "yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm -y; sudo yum install -y sshpass libselinux-python python-pip python-devel httpd sshpass vsftpd createrepo pki-ca", run: "always"
+  ipa.vm.provision :shell, :inline => "python -m pip install -U pip ; python -m pip install pexpect; python -m pip install ansible", run: "always"
   #  ipa.vm.hostname = "ipa.test.example.com"
   ipa.vm.network "private_network", ip: "192.168.55.20"
   ipa.vm.provider :virtualbox do |ipa|

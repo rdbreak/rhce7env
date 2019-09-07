@@ -97,7 +97,8 @@
          # For root - use \`sudo\` or \`sudo su -\`
          # Repo is available to use from http://repo.test.example.com/rpms
          # Keytab is provided on http://ipa.test.example.com/system.keytab
-         #
+         # CA certificate is provided on http://ipa.test.example.com/ca.crt
+         # 
          # TEST.EXAMPLE.com realm has been configured already, there are also two additional NICs.
          # 
          # LDAP Users (Can be easily accessed from root user)

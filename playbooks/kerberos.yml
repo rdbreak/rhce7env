@@ -3,6 +3,7 @@
   strategy: free
   gather_facts: False
   become: true
+  ignore_errors: true
   tasks:
   - ipa_dnsrecord:
       ipa_host: ipa.test.example.com
@@ -12,7 +13,6 @@
       record_name: system1
       record_type: 'A'
       record_value: '192.168.55.21'
-    ignore_errors: true
   - name: Adding NFS service to System1
     ipa_service:
       name: nfs/system1.test.example.com
@@ -67,7 +67,6 @@
       timeout: 10
     become: yes
     become_user: vagrant
-    ignore_errors: yes
   - name: Sending Key to System2
     expect:
       command: ssh-copy-id -i /home/vagrant/.ssh/id_rsa.pub vagrant@system2.test.example.com 
@@ -79,7 +78,6 @@
       timeout: 10
     become: yes
     become_user: vagrant
-    ignore_errors: yes
   - name: Authenticating KRB5 Database
     expect:
       command: kinit admin
@@ -100,6 +98,42 @@
     command: cp /etc/krb5.keytab /var/www/html/system.keytab
   - name: Adjusting Permissions
     command: chmod 0644 /var/www/html/system.keytab
+  - name: Copying CA CERT
+    command: cp /etc/ipa/ca.crt /var/www/html/ca.crt
+  - name: Creating Secure Apache index file
+    lineinfile:
+      path: /var/www/html/secure.html
+      line: Welcome to the secure Apache webserver
+      create: yes
+  - name: Creating Virtualhost file
+    lineinfile:
+      path: /var/www/html/vhost.html
+      line: Welcome to the Virtual host
+      create: yes
+    tags: files
+  - name: Creating WSGI script
+    blockinfile:
+      path: /var/www/html/script.wsgi
+      block: |
+        def application(environ, start_response):
+            status = '200 OK'
+            output = 'Hello World!'     
+            response_headers = [('Content-type', 'text/plain'),
+                               ('Content-Length' str(len(output)))]
+            start_response(status, response_headers)
+            return [output]
+      create: yes
+    tags: files
+  - name: Creating User Scripting File
+    blockinfile:
+      path: /var/www/html/users.txt
+      block: |
+         bob
+         patty
+         john
+         leslie
+      create: yes
+    tags: files
   - name: Welcome to the RHCE 7 Study/Test Environment!
     debug:
       msg:
