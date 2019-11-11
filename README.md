@@ -31,8 +31,12 @@ systemctl stop packagekit; yum install -y epel-release && yum install -y git bin
 
 ## Windows/RHEL 8/Fedora 30
 - [Install the Latest Version of Vagrant](https://www.vagrantup.com/downloads.html)
-    - Vagrant Plugin - Open PowerShell/Terminal as Administrator/Root and run `vagrant plugin install vagrant-guest_ansible`
 - [Install the Latest Version of Virtualbox and Virtual Box Extension Pack](https://www.virtualbox.org/wiki/Downloads)
+- If on Windows, install the following vagrant plugin via PowerShell as Administrator `vagrant plugin install vagrant-guest_ansible` 
+- If on Linux, install the remaining dependencies:
+```
+vagrant plugin install vagrant-guest_ansible ; sudo dnf install -y git binutils gcc make patch libgomp glibc-headers glibc-devel kernel-headers kernel-devel dkms libvirt libvirt-devel ruby-devel libxslt-devel libxml2-devel 
+```
 
 ##### Once the above software is installed. Do the following if you're running the environment on Windows:
 1. Create a separate `~/bin` directory and `cd` to it using the same PowerShell/Terminal as Administrator/Root.  (The directory doesn't have to be ~/bin, it can be anything you want.)

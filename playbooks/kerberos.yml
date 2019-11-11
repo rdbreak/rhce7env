@@ -90,6 +90,8 @@
   - name: Adding System1 Host Principal to Keytab
     command: sudo kadmin.local ktadd host/system1.test.example.com
     tags: kerberos
+  - name: Adding System2 Host Principal to Keytab
+    command: sudo kadmin.local ktadd host/system2.test.example.com
   - name: Copying Keytab To Apache Server
     command: cp /etc/krb5.keytab /var/www/html/system.keytab
   - name: Adjusting Permissions
