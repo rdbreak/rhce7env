@@ -22,7 +22,7 @@ config.vm.define "system1" do |system1|
   system1.vm.network "private_network", ip: "192.168.55.111"
   system1.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
   system1.vm.provider "virtualbox" do |system1|
-    system1.memory = "1024"
+    system1.memory = "512"
 
     if not File.exist?(file_to_disk1)
       system1.customize ['createhd', '--filename', file_to_disk1, '--variant', 'Fixed', '--size', 10 * 1024]
@@ -42,7 +42,7 @@ config.vm.define "system2" do |system2|
   system2.vm.network "private_network", ip: "192.168.55.113"
   system2.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"
   system2.vm.provider "virtualbox" do |system2|
-    system2.memory = "1024"
+    system2.memory = "512"
 
     if not File.exist?(file_to_disk2)
       system2.customize ['createhd', '--filename', file_to_disk2, '--variant', 'Fixed', '--size', 10 * 1024]
