@@ -63,6 +63,13 @@
   - name: IPA server Configured.
     command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
     ignore_errors: yes
+  - name: Authenticating KRB5 Database
+    expect:
+      command: kinit admin
+      responses:
+        (.*)Password for admin@TEST.EXAMPLE.COM(.*): "password"
+  - name: Setting IPA user home directory location
+    command: ipa config-mod --homedirectory /home/ldap
   - name: Enabling services
     service: name={{item}} enabled=true
     with_items:
