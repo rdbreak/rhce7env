@@ -1,54 +1,44 @@
 ---
-- hosts: repo
+- name: Setting Up the Repo Server
+  hosts: repo
   strategy: free
-  become: true
   gather_facts: false
+  ignore_errors: true
   tasks:
   - name: Setting Hostname
-    command: hostnamectl set-hostname repo.test.example.com
+    hostname: name=repo.test.example.com
   - name: Configuring network
-    shell: nmcli con mod "System enp0s8" ipv4.addresses "192.168.55.4/24 192.168.55.1" ipv4.dns 8.8.8.8 ipv4.method manual
-  - name: Fixing hosts file
-    lineinfile:
+    command: nmcli con mod "System enp0s8" ipv4.addresses "192.168.55.19/24 192.168.55.1" ipv4.dns 192.168.55.20 ipv4.dns-search test.example.com ipv4.method manual
+  - name: Building host file
+    copy:
+      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.60 control.test.example.com control\n192.168.55.59repo.test.example.com repo\n192.168.55.61 node1.test.example.com node1\n192.168.55.62 node2.test.example.com node2\n192.168.55.63 node3.test.example.com node3"
       dest: /etc/hosts
-      regexp: '^127\.0\.0\.1'
-      state: absent
-  - name: Adding localhost IPV4 address to host file
-    lineinfile:
-      path: /etc/hosts
-      line: 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-      create: yes
-  - name: Adding localhost IPV6 address to host file
-    lineinfile:
-      path: /etc/hosts
-      line: ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-      create: yes
-  - name: Adding Repo address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.4 repo.example.com repo
-      create: yes
-  - name: Adding IPA address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.5 ipa.example.com ipa
-      create: yes
-  - name: Adding system1 address to hosts file, Installing Packages...
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.6 system1.example.com system1
-      create: yes
+      force: yes
   - name: Enabling services
-    shell: for i in httpd firewalld ; do systemctl enable $i;done
-  - name: Starting services
-    shell: for i in httpd firewalld ; do systemctl start $i;done
-    ignore_errors: true
+    service:
+      name: "{{ item }}"
+      state: started
+      enabled: yes
+    with_items:
+      - httpd
+      - firewalld
   - name: Starting Firewalld
-    service: name=firewalld state=started
-  - name: Enabling Firewall Services
-    command: firewall-cmd --permanent --add-service=http --add-service=https --add-service=ntp --add-service=dns --add-service=kerberos --add-service=ldap --add-service=ldaps --add-service=ftp
+    firewalld: 
+      service: "{{ item }}"
+      immediate: yes
+      permanent: yes
+      state: enabled
+    with_items:
+      - http 
+      - https 
+      - ntp 
+      - dns 
+      - kerberos 
+      - ldap 
+      - ldaps 
+      - ftp
   - name: Reloading Firewall
-    command: firewall-cmd --reload
+    service: name=firewalld state=restarted
   - name: Enabling IPV6
     shell: sysctl net.ipv6.conf.lo.disable_ipv6=0 ; sysctl net.ipv6.conf.all.disable_ipv6=0
   - name: Creating Welcome Message
@@ -78,9 +68,8 @@
          # Why are you here? You should be working on the system hosts...
          # Anyway, try not to reboot me or bad stuff can happen.
          #
-         # You are logged into \"`hostname`\" as user \"`whoami`\"
+         # You are logged into \"`hostname`\" as the \"`whoami`\" account.
          # This system is running `cat /etc/redhat-release`
-         # kernel is `uname -r`
          #
          "
 ...

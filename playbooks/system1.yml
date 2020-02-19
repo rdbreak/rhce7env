@@ -1,45 +1,20 @@
 ---
-- hosts: system1
+- name: Setting up System 1
+  hosts: system1
   strategy: free
   gather_facts: False
-  become: true
+  ignore_errors: true
   tasks:
   - name: Setting Hostname
-    command: hostnamectl set-hostname system1.test.example.com
+    hostname: name=system1.test.example.com
   - name: Disabling services
     selinux:
-      state: permissive
-      policy: targeted
-  - name: Fixing hosts file
-    lineinfile:
+      state: disabled
+  - name: Building host file
+    copy:
       dest: /etc/hosts
-      regexp: '^127\.0\.0\.1'
-      state: absent
-  - name: Rebuilding host file
-    lineinfile:
-      path: /etc/hosts
-      line: 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-      create: yes
-  - name: Adding IPA address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.20  ipa.test.example.com ipa
-      create: yes
-  - name: Adding Repo address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.19  repo.test.example.com repo
-      create: yes
-  - name: Adding system1 IP address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.21 system1.test.example.com system1
-      create: yes
-  - name: Adding system2 IP address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.22 system2.test.example.com system2
-      create: yes
+      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.19  repo.test.example.com repo\n192.168.55.20  ipa.test.example.com ipa\n192.168.55.21 system1.test.example.com system1\n192.168.55.22 system2.test.example.com system2"
+      force: yes
   - name: Configuring network
     command: nmcli con mod "System enp0s8" ipv4.addresses "192.168.55.21/24 192.168.55.1" ipv4.dns 192.168.55.20 ipv4.dns-search test.example.com ipv4.method manual
 #  - name: Reloading Network
@@ -57,11 +32,12 @@
   - name: Erasing Repos
     shell: rm -rf /etc/yum.repos.d/*
     tags: repo
-  - name: Enabling services
-    service: name=firewalld enabled=true
-  - name: Starting services
-    service: name=firewalld state=started
-  - name: Finishing IPA client configuration
+  - name: Enabling Firewalld. Finishing IPA client configuration
+    service: 
+      name: firewalld
+      state: started
+      enabled: yes
+  - name: Finished IPA client configuration
     async_status: jid={{ ipa_sleeper.ansible_job_id }}
     register: job_result
     until: job_result.finished
@@ -90,16 +66,15 @@
          #  \ \/___/ /          \ \_\ \/___/ / /_/ /     / / /_______\/_/    / / /          /___\_\/__/\
          #   \_____\/            \/_/\_____\/  \_\/      \/__________/       \/_/           \_________\/
          '"#
-         # You are logged into \"`hostname`\" as user \"`whoami`\"
+         # You are logged into \"`hostname`\" as the \"`whoami`\" account.
          # This system is running `cat /etc/redhat-release`
-         # kernel is `uname -r`
          #
          # For root - use \`sudo\` or \`sudo su -\`
          # Repo is available to use from http://repo.test.example.com/rpms
          # Keytab is provided on http://ipa.test.example.com/system.keytab
          # CA certificate is provided on http://ipa.test.example.com/ca.crt
          # 
-         # TEST.EXAMPLE.com realm has been configured already, there are also two additional NICs.
+         # TEST.EXAMPLE.COM realm has been configured already, there are also two additional NICs.
          # 
          # LDAP Users (Can be easily accessed from root user)
          # Usernames = dave, lisa

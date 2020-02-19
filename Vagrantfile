@@ -6,6 +6,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 # Use same SSH key for each machine
 config.ssh.insert_key = false
 config.vm.box_check_update = false
+
+# Repo System
 config.vm.define "repo" do |repo|
   repo.vm.box = "rdbreak/pracrepo"
 #  repo.vm.hostname = "repo.test.example.com"
@@ -14,6 +16,8 @@ config.vm.define "repo" do |repo|
     repo.memory = "1024"
   end
 end
+
+# System 2
 config.vm.define "system1" do |system1|
   system1.vm.box = "rdbreak/pracenvs"
 #  system1.vm.hostname = "system1.test.example.com"
@@ -34,6 +38,8 @@ config.vm.define "system1" do |system1|
     yes| sudo mkfs.ext4 /dev/sdb
     SHELL
   end
+
+# System 2
 config.vm.define "system2" do |system2|
   system2.vm.box = "rdbreak/pracenvs"
 #  system2.vm.hostname = "system2.test.example.com"
@@ -56,6 +62,7 @@ config.vm.define "system2" do |system2|
     SHELL
 end
 
+# IPA System
 config.vm.define "ipa" do |ipa|
   ipa.vm.box = "centos/7"
   ipa.vm.provision :shell, :inline => "sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config; sudo systemctl restart sshd;", run: "always"

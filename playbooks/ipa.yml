@@ -1,65 +1,56 @@
 ---
-- hosts: ipa
+- name: Setting up the IPA Server
+  hosts: ipa
   strategy: free 
   gather_facts: False
-  become: true
+  ignore_errors: true
   tasks:
   - name: Setting Hostname
-    command: hostnamectl set-hostname ipa.test.example.com
-  - name: Fixing hosts file
-    lineinfile:
+    hostname: name=ipa.test.example.com
+  - name: Building host file
+    copy:
       dest: /etc/hosts
-      regexp: '^127\.0\.0\.1'
-      state: absent
-  - name: Rebuilding host file
-    lineinfile:
-      path: /etc/hosts
-      line: 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
-      create: yes
-  - name: Adding IPA address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.20 ipa.test.example.com ipa
-      create: yes
-  - name: Adding Repo address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.19 repo.test.example.com repo
-      create: yes
-  - name: Adding system1 IP address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.21 system1.test.example.com system1
-      create: yes
-  - name: Adding system2 IP address to hosts file
-    lineinfile:
-      path: /etc/hosts
-      line: 192.168.55.22 system2.test.example.com system2
-      create: yes
+      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.19 repo.test.example.com repo\n192.168.55.20 ipa.test.example.com ipa\n192.168.55.21 system1.test.example.com system1\n192.168.55.22 system2.test.example.com system2"
+      force: yes
   - name: Configuring network
-    shell: nmcli con mod "System eth1" ipv4.addresses 192.168.55.20/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search example.com ipv4.method manual
+    command: nmcli con mod "System eth1" ipv4.addresses 192.168.55.20/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search test.example.com ipv4.method manual
   - name: Starting Firewalld
     service: name=firewalld state=started
   - name: Enabling Firewall Services
-    command: firewall-cmd --permanent --add-service=http --add-service=https --add-service=ntp --add-service=dns --add-service=kerberos --add-service=ldap --add-service=ldaps --add-service=ftp
-  - name: Reloaded Firewall. Installing Environment Packages...
-    command: firewall-cmd --reload
+    firewalld: 
+      service: "{{ item }}"
+      permanent: yes
+      state: enabled
+    with_items:
+      - http 
+      - https 
+      - ntp 
+      - dns 
+      - kerberos 
+      - ldap 
+      - ldaps 
+      - ftp
+  - name: Reloading Firewalld
+    service: name=firewalld state=restarted
   - name: Creating Temporary Repo File
     file:
       path: /etc/yum.repos.d/rpms.repo
       state: touch
       mode: 0755
   - name: Building Repo File
-    blockinfile:
+    copy:
       dest: /etc/yum.repos.d/rpms.repo
-      block: |
-       [rpms]
-       name=rpms
-       baseurl=http://repo/rpms
-       gpgcheck=0
-       enabled=1
+      content: "[rpms]\nname=rpms\nbaseurl=http://repo/rpms\ngpgcheck=0\nenabled=1"
+      force: yes
   - name: Packages Installed. Configuring IPA server...(Est. Time - 7 minutes)
-    command: yum install -y vsftpd ipa-server ipa-server-dns chrony
+    yum: 
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - vsftpd
+      - ipa-server 
+      - ipa-server-dns 
+      - chrony
   - name: IPA server Configured.
     command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
     ignore_errors: yes
@@ -70,15 +61,19 @@
         (.*)Password for admin@TEST.EXAMPLE.COM(.*): "password"
   - name: Setting IPA user home directory location
     command: ipa config-mod --homedirectory /home/ldap
-  - name: Enabling services
-    service: name={{item}} enabled=true
+  - name: Enabling Services
+    service: 
+      name: "{{ item }}"
+      enabled: true
+      state: started
     with_items:
       - httpd
       - vsftpd
       - firewalld
       - chronyd
   - name: Setting SELinux To Permissive
-    shell: setenforce 0
+    selinux:
+      state: disabled
   - name: Generating RSA Key
     command : ssh-keygen -q -t rsa -f /home/vagrant/.ssh/id_rsa -C "" -N ""
     become: yes
@@ -111,8 +106,7 @@
          # Why are you here? You should be working on the system hosts...
          # Anyway, try not to reboot me or bad stuff can happen.
          #
-         # You are logged into \"`hostname`\" as user \"`whoami`\"
+         # You are logged into \"`hostname`\" as the \"`whoami`\" account.
          # This system is running `cat /etc/redhat-release`
-         # kernel is `uname -r`
          #
          "

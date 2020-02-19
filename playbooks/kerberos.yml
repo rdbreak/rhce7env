@@ -1,8 +1,8 @@
 ---
-- hosts: ipa
+- name: Finishing Kerberos Configuration
+  hosts: ipa
   strategy: free
   gather_facts: False
-  become: true
   ignore_errors: true
   tasks:
   - ipa_dnsrecord:
@@ -24,7 +24,7 @@
     ipa_user:
         name: dave
         state: present
-        krbpasswordexpiration: 20200119235959
+        krbpasswordexpiration: "20200119235959"
         givenname: dave
         sn: dave
         mail:
@@ -33,8 +33,8 @@
         - '+555123456'
         sshpubkey:
         password: password
-        uidnumber: 1000
-        gidnumber: 100
+        uidnumber: "1001"
+        gidnumber: "101"
         ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password
@@ -42,7 +42,7 @@
     ipa_user:
         name: lisa
         state: present
-        krbpasswordexpiration: 20200119235959
+        krbpasswordexpiration: "20200119235959"
         givenname: lisa
         sn: lisa
         mail:
@@ -51,8 +51,8 @@
         - '+555123456'
         sshpubkey:
         password: password
-        uidnumber: 1001
-        gidnumber: 101
+        uidnumber: "1002"
+        gidnumber: "102"
         ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password    
@@ -121,7 +121,7 @@
             status = '200 OK'
             output = 'Hello World!'     
             response_headers = [('Content-type', 'text/plain'),
-                               ('Content-Length' str(len(output)))]
+                                ('Content-Length' str(len(output)))]
             start_response(status, response_headers)
             return [output]
       create: yes
