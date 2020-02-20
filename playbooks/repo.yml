@@ -11,8 +11,8 @@
     command: nmcli con mod "System enp0s8" ipv4.addresses "192.168.55.19/24 192.168.55.1" ipv4.dns 192.168.55.20 ipv4.dns-search test.example.com ipv4.method manual
   - name: Building host file
     copy:
-      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.60 control.test.example.com control\n192.168.55.59repo.test.example.com repo\n192.168.55.61 node1.test.example.com node1\n192.168.55.62 node2.test.example.com node2\n192.168.55.63 node3.test.example.com node3"
       dest: /etc/hosts
+      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.19  repo.test.example.com repo\n192.168.55.20  ipa.test.example.com ipa\n192.168.55.21 system1.test.example.com system1\n192.168.55.22 system2.test.example.com system2"
       force: yes
   - name: Enabling services
     service:
@@ -37,8 +37,6 @@
       - ldap 
       - ldaps 
       - ftp
-  - name: Reloading Firewall
-    service: name=firewalld state=restarted
   - name: Enabling IPV6
     shell: sysctl net.ipv6.conf.lo.disable_ipv6=0 ; sysctl net.ipv6.conf.all.disable_ipv6=0
   - name: Creating Welcome Message

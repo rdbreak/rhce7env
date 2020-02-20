@@ -15,12 +15,19 @@
   - name: Configuring network
     command: nmcli con mod "System eth1" ipv4.addresses 192.168.55.20/24 ipv4.gateway 192.168.55.1 ipv4.dns 8.8.8.8 ipv4.dns-search test.example.com ipv4.method manual
   - name: Starting Firewalld
-    service: name=firewalld state=started
+    service: 
+      name: "{{ item }}"
+      state: restarted
+      enabled: yes
+    with_items:
+      - firewalld
+      - NetworkManager
   - name: Enabling Firewall Services
     firewalld: 
       service: "{{ item }}"
       permanent: yes
       state: enabled
+      immediate: yes
     with_items:
       - http 
       - https 
@@ -30,8 +37,6 @@
       - ldap 
       - ldaps 
       - ftp
-  - name: Reloading Firewalld
-    service: name=firewalld state=restarted
   - name: Creating Temporary Repo File
     file:
       path: /etc/yum.repos.d/rpms.repo

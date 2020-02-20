@@ -4,8 +4,10 @@
   strategy: free
   gather_facts: False
   ignore_errors: true
+  become: yes
   tasks:
-  - ipa_dnsrecord:
+  - name: Adding DNS Record
+    ipa_dnsrecord:
       ipa_host: ipa.test.example.com
       ipa_pass: password
       state: present
@@ -65,7 +67,6 @@
         '\]\$': 'logout'
         "vagrant@system1.test.example.com's password": 'vagrant'
       timeout: 10
-    become: yes
     become_user: vagrant
   - name: Sending Key to System2
     expect:
@@ -76,7 +77,6 @@
         '\]\$': 'logout'
         "vagrant@system2.test.example.com's password": 'vagrant'
       timeout: 10
-    become: yes
     become_user: vagrant
   - name: Authenticating KRB5 Database
     expect:
@@ -93,15 +93,23 @@
   - name: Adding System2 Host Principal to Keytab
     command: sudo kadmin.local ktadd host/system2.test.example.com
   - name: Copying Keytab To Apache Server
-    command: cp /etc/krb5.keytab /var/www/html/system.keytab
-  - name: Adjusting Permissions
-    command: chmod 0644 /var/www/html/system.keytab
+    copy:
+      src: /etc/krb5.keytab
+      dest: /var/www/html/system.keytab
+      remote_src: yes
+      mode: '0644'
   - name: Copying Keytab To Apache Server
-    command: cp /etc/krb5.keytab /var/www/html/system.keytab
-  - name: Adjusting Permissions
-    command: chmod 0644 /var/www/html/system.keytab
+    copy:
+      src: /etc/krb5.keytab
+      dest: /var/www/html/system.keytab
+      remote_src: yes
+      mode: '0644'
   - name: Copying CA CERT
-    command: cp /etc/ipa/ca.crt /var/www/html/ca.crt
+    copy: 
+      src: /etc/ipa/ca.crt
+      dest: /var/www/html/ca.crt
+      remote_src: yes
+      mode: '0644'
   - name: Creating Secure Apache index file
     lineinfile:
       path: /var/www/html/secure.html
@@ -121,26 +129,22 @@
             status = '200 OK'
             output = 'Hello World!'     
             response_headers = [('Content-type', 'text/plain'),
-                                ('Content-Length' str(len(output)))]
+                                ('Content-Length', str(len(output)))]
             start_response(status, response_headers)
             return [output]
       create: yes
     tags: files
   - name: Creating User Scripting File
-    blockinfile:
-      path: /var/www/html/users.txt
-      block: |
-         bob
-         patty
-         john
-         leslie
-      create: yes
+    copy:
+      dest: /var/www/html/users.txt
+      content: "bob\npatty\njohn\nleslie"
+      force: yes
     tags: files
   - name: Welcome to the RHCE 7 Study/Test Environment!
     debug:
       msg:
         - 'Next Steps: Accessing The Systems:'
-        - '- IPA - 192.168.55.20'
+        - '- IPA Server- 192.168.55.20'
         - '- System 1 - 192.168.55.21'
         - '- System 2 - 192.168.55.22'
         - '- Username/Password - vagrant/vagrant'

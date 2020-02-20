@@ -17,8 +17,8 @@
       force: yes
   - name: Configuring network
     command: nmcli con mod "System enp0s8" ipv4.addresses "192.168.55.21/24 192.168.55.1" ipv4.dns 192.168.55.20 ipv4.dns-search test.example.com ipv4.method manual
-#  - name: Reloading Network
-#    command: nmcli con up "System enp0s8"  
+  - name: Reloading Network
+    service: name=NetworkManager state=restarted
   - name: Fixing Resolv File
     command: echo 'nameserver 192.168.55.20' > /etc/resolv.conf
   - name: Authconfig Enabled. Configuring IPA Client...
@@ -32,7 +32,7 @@
   - name: Erasing Repos
     shell: rm -rf /etc/yum.repos.d/*
     tags: repo
-  - name: Enabling Firewalld. Finishing IPA client configuration
+  - name: Enabling Firewalld. Finishing IPA client configuration...
     service: 
       name: firewalld
       state: started
