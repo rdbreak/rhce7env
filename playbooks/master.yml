@@ -1,7 +1,0 @@
----
-- import_playbook: repo.yml
-- import_playbook: ipa.yml
-- import_playbook: system1.yml
-- import_playbook: system2.yml
-- import_playbook: kerberos.yml
-...

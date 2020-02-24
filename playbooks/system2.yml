@@ -7,13 +7,10 @@
   tasks:
   - name: Setting Hostname
     hostname: name=system2.test.example.com
-  - name: Disabling services
-    selinux:
-      state: disabled
   - name: Building host file
     copy:
       dest: /etc/hosts
-      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.19  repo.test.example.com repo\n192.168.55.20  ipa.test.example.com ipa\n192.168.55.21 system1.test.example.com system1\n192.168.55.22 system2.test.example.com system2"
+      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.19 repo.test.example.com repo\n192.168.55.20 ipa.test.example.com ipa\n192.168.55.21 system1.test.example.com system1\n192.168.55.22 system2.test.example.com system2"
       force: yes
   - name: Configuring network
     command: nmcli con mod "System enp0s8" ipv4.addresses "192.168.55.22/24 192.168.55.1" ipv4.dns 192.168.55.20 ipv4.dns-search test.example.com ipv4.method manual
@@ -29,10 +26,10 @@
     async: 500
     poll: 0
     register: ipa_sleeper
-  - name: Erasing Repos
+  - name: Erasing Repos and Enabling Firewalld
     shell: rm -rf /etc/yum.repos.d/*
     tags: repo
-  - name: Enabling Firewalld. Finishing IPA client configuration...
+  - name: Finishing IPA client configuration...Contacting IPA Server
     service: 
       name: firewalld
       state: started
@@ -47,7 +44,7 @@
       path: /etc/profile.d/welcome.sh
       state: touch
       mode: 0755
-  - name: Building Welcome Message. Rebooting System 2
+  - name: Building Welcome Message
     blockinfile:
       dest: /etc/profile.d/welcome.sh
       block: |
@@ -70,16 +67,18 @@
          # This system is running `cat /etc/redhat-release`
          #
          # For root - use \`sudo\` or \`sudo su -\`
+         #
          # Repo is available to use from http://repo.test.example.com/rpms
          # Keytab is provided on http://ipa.test.example.com/system.keytab
          # CA certificate is provided on http://ipa.test.example.com/ca.crt
          # 
-         # TEST.EXAMPLE.COM realm has been configured already, there are also two additional NICs.
+         # TEST.EXAMPLE.COM realm has been configured already 
+         # There are also two additional NICs and an additional drive.        
          # 
          # LDAP Users (Can be easily accessed from root user)
          # Usernames = dave, lisa
          # Passwords = password
          "
-  - name: Rebooted System 2
-    reboot:
-...
+  - name: Disabling Services and Rebooting
+    selinux:
+      state: disabled

@@ -1,0 +1,4 @@
+---
+- import_playbook: system2.yml
+- import_playbook: kerberos.yml
+...

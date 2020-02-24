@@ -26,7 +26,7 @@
     ipa_user:
         name: dave
         state: present
-        krbpasswordexpiration: "20200119235959"
+        krbpasswordexpiration: '20200119235959'
         givenname: dave
         sn: dave
         mail:
@@ -35,8 +35,8 @@
         - '+555123456'
         sshpubkey:
         password: password
-        uidnumber: "1001"
-        gidnumber: "101"
+        uidnumber: '1001'
+        gidnumber: '101'
         ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password
@@ -44,7 +44,7 @@
     ipa_user:
         name: lisa
         state: present
-        krbpasswordexpiration: "20200119235959"
+        krbpasswordexpiration: '20200119235959'
         givenname: lisa
         sn: lisa
         mail:
@@ -53,8 +53,8 @@
         - '+555123456'
         sshpubkey:
         password: password
-        uidnumber: "1002"
-        gidnumber: "102"
+        uidnumber: '1002'
+        gidnumber: '102'
         ipa_host:  ipa.test.example.com
         ipa_user: admin
         ipa_pass: password    
@@ -82,7 +82,7 @@
     expect:
       command: kinit admin
       responses:
-        (.*)Password for admin@TEST.EXAMPLE.COM(.*): "password"
+        (.*)Password for admin@TEST.EXAMPLE.COM(.*): 'password'
     tags: kerberos
   - name: Adding System1 NFS Principal to Keytab
     command: sudo kadmin.local ktadd nfs/system1.test.example.com
@@ -143,13 +143,16 @@
   - name: Welcome to the RHCE 7 Study/Test Environment!
     debug:
       msg:
-        - 'Next Steps: Accessing The Systems:'
-        - '- IPA Server- 192.168.55.20'
+        - ' The repo server, IPA server, Server 1, and Server 2 have been set up successfully!'
+        - '-----------------------------------------------------------------------------------'
+        - ' Server 2 is rebooting.  If you are unable to access it right away,'
+        - ' wait a couple moments, then try again.'
+        - '-----------------------------------------------------------------------------------'
+        - ' Next Steps: Accessing The Systems:'
+        - '- IPA Server - 192.168.55.20'
         - '- System 1 - 192.168.55.21'
         - '- System 2 - 192.168.55.22'
-        - '- Username/Password - vagrant/vagrant'
-        - '- For root - use `sudo` or `sudo su`'
+        - '- Username/Password - vagrant'
         - '- Access example - `ssh vagrant@192.168.55.21` or `vagrant ssh system1`'
-        - ' ---------------------------------------------------------------------'
-        - '- Repo is available to use from http://repo.test.example.com/rpms'
-        - '- Happy Studying!'
+        - '-----------------------------------------------------------------------------------'
+        - '- Repo, keytab, and available CA certificate information are on System 1 or 2.'

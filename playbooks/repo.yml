@@ -12,7 +12,7 @@
   - name: Building host file
     copy:
       dest: /etc/hosts
-      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.19  repo.test.example.com repo\n192.168.55.20  ipa.test.example.com ipa\n192.168.55.21 system1.test.example.com system1\n192.168.55.22 system2.test.example.com system2"
+      content: "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4\n192.168.55.19 repo.test.example.com repo\n192.168.55.20 ipa.test.example.com ipa\n192.168.55.21 system1.test.example.com system1\n192.168.55.22 system2.test.example.com system2"
       force: yes
   - name: Enabling services
     service:

@@ -42,7 +42,7 @@
       path: /etc/yum.repos.d/rpms.repo
       state: touch
       mode: 0755
-  - name: Building Repo File
+  - name: Building Repo File then Installing Packages...
     copy:
       dest: /etc/yum.repos.d/rpms.repo
       content: "[rpms]\nname=rpms\nbaseurl=http://repo/rpms\ngpgcheck=0\nenabled=1"
@@ -56,14 +56,20 @@
       - ipa-server 
       - ipa-server-dns 
       - chrony
-  - name: IPA server Configured.
-    command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p 'password' -n test.example.com -U --forwarder 8.8.8.8
-    ignore_errors: yes
+  - name: Configuring IPA Server
+    block:
+      - name: IPA server Configured.
+        command: ipa-server-install --setup-dns --allow-zone-overlap --auto-reverse -a 'password' --hostname ipa.test.example.com -r TEST.EXAMPLE.COM -p     'password' -n test.example.com -U --forwarder 8.8.8.8
+    rescue:
+      - debug: 
+          msg: 'An error occurred during the IPA server configuration, reverting back...'
+      - name: Reverting IPA Server config
+        command: ipa-server-install --uninstall
   - name: Authenticating KRB5 Database
     expect:
       command: kinit admin
       responses:
-        (.*)Password for admin@TEST.EXAMPLE.COM(.*): "password"
+        (.*)Password for admin@TEST.EXAMPLE.COM(.*): 'password'
   - name: Setting IPA user home directory location
     command: ipa config-mod --homedirectory /home/ldap
   - name: Enabling Services
@@ -76,9 +82,6 @@
       - vsftpd
       - firewalld
       - chronyd
-  - name: Setting SELinux To Permissive
-    selinux:
-      state: disabled
   - name: Generating RSA Key
     command : ssh-keygen -q -t rsa -f /home/vagrant/.ssh/id_rsa -C "" -N ""
     become: yes
