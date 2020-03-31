@@ -7,6 +7,11 @@
   tasks:
   - name: Setting Hostname
     hostname: name=system1.test.example.com
+  - name: Changing User Password
+    shell: echo vagrant | sudo passwd vagrant --stdin
+    become: no
+  - name: Changing Root Password
+    shell: echo password | sudo passwd root --stdin
   - name: Building host file
     copy:
       dest: /etc/hosts
@@ -81,3 +86,4 @@
   - name: Adjusting Services and Rebooting
     selinux:
       state: permissive
+      policy: targeted
